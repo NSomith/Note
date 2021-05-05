@@ -108,4 +108,6 @@ dependencies {
 
     // Color Picker Dialog
     implementation "com.github.skydoves:colorpickerview:2.1.7"
+
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }
