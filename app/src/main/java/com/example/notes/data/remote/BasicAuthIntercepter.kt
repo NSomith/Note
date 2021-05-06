@@ -6,8 +6,8 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class BasicAuthIntercepter :Interceptor{
-    val email:String? = null
-    val password:String?= null
+    var email:String? = null
+    var password:String?= null
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request() //check the request

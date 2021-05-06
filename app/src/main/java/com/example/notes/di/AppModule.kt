@@ -1,12 +1,14 @@
 package com.example.notes.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.notes.data.local.NoteDataBase
 import com.example.notes.data.remote.BasicAuthIntercepter
 import com.example.notes.data.remote.NoteApi
 import com.example.notes.other.Constants.BASE_URL
 import com.example.notes.other.Constants.DB_NAME
+import com.example.notes.other.Constants.SH
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,5 +50,27 @@ object AppModule {
                 .build()
                 .create(NoteApi::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideSharedPreference(@ApplicationContext context: Context)
+        =context.getSharedPreferences(SH,Context.MODE_PRIVATE)
+
+//    @Singleton
+//    @Provides
+//    fun provideEncryptedSharedPreferences(
+//        @ApplicationContext context: Context
+//    ): SharedPreferences {
+//        val masterKey = MasterKey.Builder(context)
+//            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+//            .build()
+//        return EncryptedSharedPreferences.create(
+//            context,
+//            ENCRYPTED_SHARED_PREF_NAME,
+//            masterKey,
+//            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+//            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+//        )
+//    }
 
 }

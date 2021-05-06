@@ -3,9 +3,10 @@
     package="com.example.notes">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-
+<!--android:usesCleartextTraffic="true"  tells retrifut which use https that we can use http -->
     <application
         android:name=".NoteApplication"
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
