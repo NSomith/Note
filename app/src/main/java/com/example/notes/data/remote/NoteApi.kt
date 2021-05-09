@@ -23,22 +23,22 @@ interface NoteApi {
             @Body registerRequest:AccountRequest
     ):Response<SimpleResponse>
 
-    @POST("/addnote")
+    @POST("/addNote")
     suspend fun addNote(
             @Body note:Note
     ):Response<ResponseBody> //when we dont have any content in the response only status code then this helps
 
-    @POST("/deletenote")
+    @POST("/deleteNote")
     suspend fun deleteNote(
             @Body deleteRequest: DeleteRequest
     ):Response<ResponseBody>
 
-    @POST("/addownertonote")
+    @POST("/addOwnerToNote")
     suspend fun addOwnerToNote(
             @Body addownerrequest:OwnerRequest
     ):Response<SimpleResponse>
 
-    @GET("/getnote")
+    @GET("/getNotes")
     suspend fun getNotes():Response<List<Note>>
 
 
