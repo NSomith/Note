@@ -50,6 +50,7 @@ class NoteFragment:BaseFragment(R.layout.fragment_notes) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().requestedOrientation = SCREEN_ORIENTATION_USER
         setRecylerView()
+        setUpSwipeRefresh()
         subscribetoObserver()
         noteAdapter.setOnItemClickListener {
             findNavController().navigate(
@@ -155,6 +156,12 @@ class NoteFragment:BaseFragment(R.layout.fragment_notes) {
         adapter = noteAdapter
         layoutManager = LinearLayoutManager(requireContext())
         ItemTouchHelper(ItemTouchHelperCallback).attachToRecyclerView(this)
+    }
+
+    private fun setUpSwipeRefresh(){
+        swipeRefreshLayout.setOnRefreshListener {
+            viewModel.syncAllNotes()
+        }
     }
 
     private fun logout(){

@@ -13,6 +13,7 @@ import com.example.notes.other.networkBoundResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import retrofit2.Response
 import javax.inject.Inject
 
 class NotesRepo @Inject constructor(
@@ -21,6 +22,7 @@ class NotesRepo @Inject constructor(
     private val context: Context
 ){
 
+    private var currNoteResponse:Response<List<Note>>? = null
 
     suspend fun deleteLocallyDeletedNoteId(deletedNoteId: String)
         = notesDao.deleteLocallyDeletedNoteId(deletedNoteId)
@@ -36,6 +38,18 @@ class NotesRepo @Inject constructor(
             notesDao.insertLocallyDeltedNoteId(LocallyDeletedNoteId(noteId))
         }else{
             notesDao.deleteLocallyDeletedNoteId(noteId)
+        }
+    }
+
+    suspend fun syncNotes(){
+        val locallyDeletedNoteId = notesDao.getAllLocallyDeletedNoteId()
+        locallyDeletedNoteId.forEach { id -> deleteNote(id.deletedNoteId) }
+        val unsyncedNote = notesDao.getAllUnsyncedNote()
+        unsyncedNote.forEach { note-> insertNote(note) }
+        currNoteResponse = noteApi.getNotes()
+        currNoteResponse?.body()?.let { notes->
+            notesDao.deleteAllNotes()
+            insertNotes(notes.onEach { note-> note.isSynced = true })
         }
     }
 
@@ -62,11 +76,12 @@ class NotesRepo @Inject constructor(
                     notesDao.getAllNotes()
             },
             fetch = {
-                    noteApi.getNotes()
+                    syncNotes()
+                currNoteResponse
             },
             saveFetchResult = { response->
-                response.body()?.let {
-                    insertNotes(it)
+                response?.body()?.let { notes->
+                    insertNotes(notes.onEach { note-> note.isSynced =true })
                 }
             },
             shouldFetch = {
