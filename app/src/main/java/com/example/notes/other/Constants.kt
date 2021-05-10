@@ -12,4 +12,5 @@ object Constants {
     const val SH = "KEY_PASS"
     const val DEFAULT_NOTE_COLOR = "FFA500"
     const val COLOR_PICKER_FRAGMENT = "COLOR_PICKER_FRAGMENT"
+    const val ADD_OWNER_DIALOG = "ADD_OWNER_DIALOG"
 }

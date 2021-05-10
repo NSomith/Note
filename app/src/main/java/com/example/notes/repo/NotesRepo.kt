@@ -7,6 +7,7 @@ import com.example.notes.data.local.entity.Note
 import com.example.notes.data.remote.NoteApi
 import com.example.notes.data.remote.request.AccountRequest
 import com.example.notes.data.remote.request.DeleteRequest
+import com.example.notes.data.remote.request.OwnerRequest
 import com.example.notes.other.CheckInternetConnection
 import com.example.notes.other.Resource
 import com.example.notes.other.networkBoundResource
@@ -89,7 +90,23 @@ class NotesRepo @Inject constructor(
             }
         )
     }
+
+    fun observeNoteById(noteId: String) = notesDao.observeNoteById(noteId)
+
     suspend fun getNoteById(id:String) = notesDao.getNoteById(id)
+
+    suspend fun addOwner(owner:String,noteId:String) = withContext(Dispatchers.IO){
+        try{
+            val response = noteApi.addOwnerToNote(OwnerRequest(noteId,owner))
+            if(response.isSuccessful && response.body()!!.success){
+                Resource.success(response.body()?.msg)
+            }else{
+                Resource.error(response.body()?.msg?: response.message(),null)
+            }
+        }catch (e:Exception){
+            Resource.error("Check network connection",null)
+        }
+    }
 
     suspend fun login(email:String,password:String) = withContext(Dispatchers.IO){
         try{
